@@ -3,6 +3,32 @@ import axios from 'axios';
 
 class Uploader extends Component {
 
+  export function uploadSuccess({ data }) {
+    return {
+      type: 'UPLOAD_DOCUMENT_SUCCESS',
+      data,
+    }
+  }
+
+  export function uploadFail(error) {
+    return {
+      type: 'UPLOAD_DOCUMENT_FAIL',
+      error,
+    };
+  }
+
+  export function uploadDocumentRequest({ file, name }) {
+    let data = new FormData();
+    data.append('file', document);
+    data.append('name', name);  
+
+    return (dispatch) => {
+      axios.post('/files', data)
+        .then(response => dispatch(uploadSuccess(response)))
+        .catch(err => dispatch(uploadFail(err)));
+    };
+  }
+
   state = {
     imageUrl: 'https://placeimg.com/320/320/animals' 
   }
